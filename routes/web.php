@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\Api\BukuController as ApiBukuController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LaporanController;
@@ -25,8 +24,9 @@ Route::middleware('auth')->group(function () {
         ->middleware('permission:lihat-daftar-buku')->name('buku.index');
     // [A2 - RENTAN] Pencarian buku dengan query SQL mentah.
     Route::get('/buku-cari', [BukuController::class, 'cari'])->name('buku.cari');
-    // [A3 - RENTAN] Penghapusan lewat GET: dapat dipicu dari situs lain (CSRF).
-    Route::get('/buku/{buku}/hapus', [ApiBukuController::class, 'destroy'])->name('buku.hapus');
+    // [A3 - DITAMBAL] Route GET /buku/{buku}/hapus dihapus; penghapusan memakai DELETE (dilindungi CSRF).
+    Route::delete('/buku/{buku}', [BukuController::class, 'destroy'])
+    ->middleware('permission:kelola-data-buku')->name('buku.destroy');
 
     Route::get('/buku/{id}/edit', [BukuController::class, 'edit'])
         ->middleware('permission:kelola-data-buku')->name('buku.edit');

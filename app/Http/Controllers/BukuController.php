@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\RedirectResponse;
 use App\Models\Buku;
 use App\Models\Kategori;
 use Illuminate\Http\JsonResponse;
@@ -21,14 +22,22 @@ class BukuController extends Controller
         ]);
     }
 
-    // [A2 - RENTAN] Input 'judul' digabung langsung ke string SQL (SQL Injection).
+// [A2 - DITAMBAL] Nilai 'judul' dikirim lewat binding (placeholder ?), bukan digabung ke string SQL.
     public function cari(Request $request): JsonResponse
     {
         $judul = $request->query('judul');
 
-        $hasil = DB::select("SELECT * FROM bukus WHERE judul = '$judul'");
+        $hasil = DB::select('SELECT * FROM bukus WHERE judul = ?', [$judul]);
 
         return response()->json($hasil);
+    }
+
+    public function destroy(Buku $buku): RedirectResponse
+    {
+        $buku->peminjamans()->delete();
+        $buku->delete();
+
+        return redirect()->route('buku.index')->with('status', 'Buku berhasil dihapus.');
     }
 
     public function edit(int $id): View

@@ -95,6 +95,12 @@
     </form>
     @endcan
 
+    {{-- [A3 - DITAMBAL] Penghapusan memakai DELETE + token CSRF; action diisi oleh JavaScript --}}
+    <form id="form-hapus" method="POST" action="#" style="display:none">
+        @csrf
+        @method('DELETE')
+    </form>
+
     <form id="form-cari" class="search-form">
         <span class="search-icon" aria-hidden="true">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -136,7 +142,7 @@
         <ul>
             @foreach ($bukuTerbaru as $b)
                 {{-- [A1 - RENTAN] {!! !!} tidak melakukan escaping (Stored XSS) --}}
-                <li><a href="{{ url('/buku/'.$b->id) }}">{!! $b->judul !!}</a></li>
+                <li><a href="{{ url('/buku/'.$b->id) }}">{{ $b->judul }}</a></li>
             @endforeach
         </ul>
     </section>
@@ -410,15 +416,10 @@
             if (!setuju) return;
             sembunyikanPesan();
 
-            try {
-                const response = await fetch(`${API_URL}/${id}`, { method: 'DELETE', headers: HEADERS });
-                if (!response.ok) throw await buatError(response);
-
-                tampilPesan('Buku berhasil dihapus.', 'sukses');
-                await muatBuku(daftarBuku.length === 1 && halaman > 1 ? halaman - 1 : halaman);
-            } catch (err) {
-                tampilError('Gagal menghapus buku', err);
-            }
+           try { sessionStorage.setItem('pulihkan_setelah_hapus', '1'); } catch (_) {}
+                const formHapus = el('form-hapus');
+                formHapus.action = `{{ url('/buku') }}/${id}`;
+                formHapus.submit();
         });
 
         let timerCari = null;
@@ -455,6 +456,12 @@
         } catch (_) {}
 
         function perluPulihkan() {
+            try {
+            if (sessionStorage.getItem('pulihkan_setelah_hapus')) {
+            sessionStorage.removeItem('pulihkan_setelah_hapus');
+                return true;
+            }
+            } catch (_) {}
             const nav = performance.getEntriesByType('navigation')[0];
             if (nav && (nav.type === 'reload' || nav.type === 'back_forward')) return true;
             try {
