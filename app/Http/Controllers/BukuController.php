@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreBukuRequest;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Buku;
 use App\Models\Kategori;
@@ -22,14 +23,28 @@ class BukuController extends Controller
         ]);
     }
 
+    public function create(): View
+    {
+        return view('buku.create', [
+            'kategoriList' => Kategori::orderBy('nama')->get(['id', 'nama']),
+        ]);
+    }
+
+    public function store(StoreBukuRequest $request): RedirectResponse
+    {
+        Buku::create($request->validated());
+
+        return redirect()->route('buku.index')->with('status', 'Buku berhasil ditambahkan.');
+    }
+
 // [A2 - DITAMBAL] Nilai 'judul' dikirim lewat binding (placeholder ?), bukan digabung ke string SQL.
     public function cari(Request $request): JsonResponse
     {
-        $judul = $request->query('judul');
+    $judul = $request->query('judul');
 
-        $hasil = DB::select('SELECT * FROM bukus WHERE judul = ?', [$judul]);
+    $hasil = DB::select('SELECT * FROM bukus WHERE judul = ?', [$judul]);
 
-        return response()->json($hasil);
+    return response()->json($hasil);
     }
 
     public function destroy(Buku $buku): RedirectResponse

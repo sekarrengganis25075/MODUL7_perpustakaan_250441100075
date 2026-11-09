@@ -61,7 +61,8 @@
 
     <div id="pesan" class="alert" role="alert"></div>
 
-    @can('kelola-data-buku')
+    @can('kelola-buku')
+    <a href="{{ route('buku.create') }}" class="btn btn-primary" style="margin-bottom:14px">+ Tambah Buku</a>
     <form id="form-buku" class="form-buku" novalidate>
         <div>
             <label for="kategori_id">Kategori</label>

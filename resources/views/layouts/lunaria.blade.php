@@ -12,7 +12,7 @@
     @stack('styles')
 </head>
 
-<body @auth data-kelola="{{ auth()->user()->can('kelola-data-buku') ? '1' : '0' }}" data-pinjam="{{ auth()->user()->can('ajukan-peminjaman-buku') ? '1' : '0' }}" @endauth>
+<body @auth data-kelola="{{ auth()->user()->can('kelola-buku') ? '1' : '0' }}" data-pinjam="{{ auth()->user()->can('ajukan-peminjaman-buku') ? '1' : '0' }}" @endauth>
 
     <header class="site-header">
         @auth
