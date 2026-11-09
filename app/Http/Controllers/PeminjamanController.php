@@ -6,6 +6,7 @@ use App\Models\Buku;
 use App\Models\Peminjaman;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class PeminjamanController extends Controller
 {
@@ -29,10 +30,12 @@ class PeminjamanController extends Controller
         return redirect()->route('peminjaman.saya')->with('status', 'Pengajuan peminjaman dikirim.');
     }
 
-    // [A4 - RENTAN] Tidak ada pemeriksaan pemilik: siapa pun yang login bisa membuka data peminjaman mana pun (IDOR).
+    // [A4 - DITAMBAL] Policy 'view' memastikan siswa hanya membuka peminjaman miliknya (mencegah IDOR).
     public function show($id)
     {
         $peminjaman = Peminjaman::findOrFail($id);
+
+        Gate::authorize('view', $peminjaman);
 
         return view('peminjaman.show', compact('peminjaman'));
     }
@@ -50,7 +53,7 @@ class PeminjamanController extends Controller
         $me = $request->user();
         $target = $user ?? $me;
 
-        abort_unless($target->id === $me->id || $me->can('kelola-peminjaman'), 403);
+        Gate::authorize('viewRiwayat', [Peminjaman::class, $target]);
 
         $list = $target->peminjamans()->with('buku')->latest('id')->paginate(15);
 
