@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\BukuController as ApiBukuController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LaporanController;
@@ -22,6 +23,11 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/buku', [BukuController::class, 'index'])
         ->middleware('permission:lihat-daftar-buku')->name('buku.index');
+    // [A2 - RENTAN] Pencarian buku dengan query SQL mentah.
+    Route::get('/buku-cari', [BukuController::class, 'cari'])->name('buku.cari');
+    // [A3 - RENTAN] Penghapusan lewat GET: dapat dipicu dari situs lain (CSRF).
+    Route::get('/buku/{buku}/hapus', [ApiBukuController::class, 'destroy'])->name('buku.hapus');
+
     Route::get('/buku/{id}/edit', [BukuController::class, 'edit'])
         ->middleware('permission:kelola-data-buku')->name('buku.edit');
     Route::get('/buku/{id}', [BukuController::class, 'show'])
@@ -38,6 +44,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/peminjaman', [PeminjamanController::class, 'store'])
         ->middleware('permission:ajukan-peminjaman-buku')->name('peminjaman.store');
+    // [A4 - RENTAN] Detail peminjaman tanpa pemeriksaan pemilik.
+    Route::get('/peminjaman/{id}', [PeminjamanController::class, 'show'])->name('peminjaman.show');
     Route::get('/peminjaman-saya', [PeminjamanController::class, 'saya'])
         ->middleware('permission:lihat-status-peminjaman-sendiri')->name('peminjaman.saya');
 

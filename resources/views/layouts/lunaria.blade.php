@@ -124,18 +124,13 @@
                         Keluar
                     </button>
                 </form>
-            @else
-                <a href="{{ route('login') }}" class="sidebar-masuk">Masuk</a>
             @endauth
         </div>
     </aside>
     @else
     <nav class="navbar">
         <div class="container navbar-inner">
-            <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Beranda</a>
-            <span class="navbar-user navbar-guest">
-                <a href="{{ route('login') }}" class="btn-login">Masuk</a>
-            </span>
+                        <a href="{{ route('home') }}" class="{{ request()->routeIs('home') ? 'active' : '' }}">Beranda</a>
         </div>
     </nav>
     @endauth

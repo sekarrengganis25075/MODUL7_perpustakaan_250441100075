@@ -130,6 +130,16 @@
         <span id="info-halaman"></span>
         <button type="button" id="btn-next" class="btn btn-secondary">Berikutnya &raquo;</button>
     </div>
+    
+    <section class="buku-terbaru" style="margin-top:28px">
+        <h3 class="page-title" style="font-size:1.2rem">Buku Terbaru</h3>
+        <ul>
+            @foreach ($bukuTerbaru as $b)
+                {{-- [A1 - RENTAN] {!! !!} tidak melakukan escaping (Stored XSS) --}}
+                <li><a href="{{ url('/buku/'.$b->id) }}">{!! $b->judul !!}</a></li>
+            @endforeach
+        </ul>
+    </section>
 
     <div id="modal-hapus" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-judul">
         <div class="modal-kartu">

@@ -29,6 +29,14 @@ class PeminjamanController extends Controller
         return redirect()->route('peminjaman.saya')->with('status', 'Pengajuan peminjaman dikirim.');
     }
 
+    // [A4 - RENTAN] Tidak ada pemeriksaan pemilik: siapa pun yang login bisa membuka data peminjaman mana pun (IDOR).
+    public function show($id)
+    {
+        $peminjaman = Peminjaman::findOrFail($id);
+
+        return view('peminjaman.show', compact('peminjaman'));
+    }
+
     public function saya(Request $request)
     {
         $list = $request->user()->peminjamans()->with('buku')

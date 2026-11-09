@@ -124,18 +124,13 @@
                         Keluar
                     </button>
                 </form>
-            <?php else: ?>
-                <a href="<?php echo e(route('login')); ?>" class="sidebar-masuk">Masuk</a>
             <?php endif; ?>
         </div>
     </aside>
     <?php else: ?>
     <nav class="navbar">
         <div class="container navbar-inner">
-            <a href="<?php echo e(route('home')); ?>" class="<?php echo e(request()->routeIs('home') ? 'active' : ''); ?>">Beranda</a>
-            <span class="navbar-user navbar-guest">
-                <a href="<?php echo e(route('login')); ?>" class="btn-login">Masuk</a>
-            </span>
+                        <a href="<?php echo e(route('home')); ?>" class="<?php echo e(request()->routeIs('home') ? 'active' : ''); ?>">Beranda</a>
         </div>
     </nav>
     <?php endif; ?>

@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Buku;
 use App\Models\Kategori;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class BukuController extends Controller
@@ -15,7 +17,18 @@ class BukuController extends Controller
     {
         return view('buku.index', [
             'kategoriList' => Kategori::orderBy('nama')->get(['id', 'nama']),
+            'bukuTerbaru'  => Buku::latest('id')->take(5)->get(['id', 'judul']),
         ]);
+    }
+
+    // [A2 - RENTAN] Input 'judul' digabung langsung ke string SQL (SQL Injection).
+    public function cari(Request $request): JsonResponse
+    {
+        $judul = $request->query('judul');
+
+        $hasil = DB::select("SELECT * FROM bukus WHERE judul = '$judul'");
+
+        return response()->json($hasil);
     }
 
     public function edit(int $id): View

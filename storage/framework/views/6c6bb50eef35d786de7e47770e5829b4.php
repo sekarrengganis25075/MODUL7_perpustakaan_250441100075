@@ -128,6 +128,16 @@
         <span id="info-halaman"></span>
         <button type="button" id="btn-next" class="btn btn-secondary">Berikutnya &raquo;</button>
     </div>
+    
+    <section class="buku-terbaru" style="margin-top:28px">
+        <h3 class="page-title" style="font-size:1.2rem">Buku Terbaru</h3>
+        <ul>
+            <?php $__currentLoopData = $bukuTerbaru; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $b): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                
+                <li><a href="<?php echo e(url('/buku/'.$b->id)); ?>"><?php echo $b->judul; ?></a></li>
+            <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+        </ul>
+    </section>
 
     <div id="modal-hapus" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-judul">
         <div class="modal-kartu">
