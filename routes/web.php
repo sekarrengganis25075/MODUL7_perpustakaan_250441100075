@@ -8,6 +8,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/uji-error', fn () => throw new \RuntimeException('Uji error'));
 Route::get('/', function () {
     return view('home');
 })->name('home');
@@ -20,21 +21,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/petugas/dashboard', [DashboardController::class, 'petugas'])
         ->middleware('permission:akses-dashboard-petugas')->name('petugas.dashboard');
 
-        Route::get('/buku', [BukuController::class, 'index'])
+    Route::get('/buku', [BukuController::class, 'index'])
         ->middleware('permission:lihat-daftar-buku')->name('buku.index');
-    Route::get('/buku/create', [BukuController::class, 'create'])
-        ->middleware('can:kelola-buku')->name('buku.create');
-    Route::post('/buku', [BukuController::class, 'store'])
-        ->middleware('can:kelola-buku')->name('buku.store');
-
-    // [A2 - DITAMBAL] Pencarian buku memakai query binding.
+    // [A2 - RENTAN] Pencarian buku dengan query SQL mentah.
     Route::get('/buku-cari', [BukuController::class, 'cari'])->name('buku.cari');
     // [A3 - DITAMBAL] Route GET /buku/{buku}/hapus dihapus; penghapusan memakai DELETE (dilindungi CSRF).
     Route::delete('/buku/{buku}', [BukuController::class, 'destroy'])
-        ->middleware('can:kelola-buku')->name('buku.destroy');
+    ->middleware('permission:kelola-data-buku')->name('buku.destroy');
 
     Route::get('/buku/{id}/edit', [BukuController::class, 'edit'])
-        ->middleware('can:kelola-buku')->name('buku.edit');
+        ->middleware('permission:kelola-data-buku')->name('buku.edit');
     Route::get('/buku/{id}', [BukuController::class, 'show'])
         ->middleware('permission:lihat-daftar-buku')->name('buku.show');
 
