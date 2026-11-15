@@ -3,6 +3,11 @@
 .env
 .env.backup
 .env.production
+/.vercel
+/node_modules
+/public/build
+/vendor
+/storage/framework/sessions/*
 .phpactor.json
 .phpunit.cache
 .phpunit.result.cache
