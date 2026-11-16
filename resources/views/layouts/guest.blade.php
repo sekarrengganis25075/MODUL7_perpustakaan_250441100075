@@ -12,7 +12,7 @@
     <body class="auth-body">
         <header class="site-header">
             <div class="container">
-                <h1 class="Lunaria Library - 250441100075">Lunaria Library</h1>
+                <h1 class="app-name">Lunaria Library - 250441100075</h1>
                 <p class="app-tagline">Temukan dan jelajahi koleksi buku favoritmu</p>
             </div>
         </header>
