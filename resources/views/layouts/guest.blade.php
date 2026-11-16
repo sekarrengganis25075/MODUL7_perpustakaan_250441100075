@@ -5,14 +5,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>Lunaria Library</title>
+        <title>Lunaria Library - 250441100075</title>
 
         @vite(['resources/css/app.css', 'resources/css/lunaria.css', 'resources/js/app.js'])
     </head>
     <body class="auth-body">
         <header class="site-header">
             <div class="container">
-                <h1 class="app-name">Lunaria Library</h1>
+                <h1 class="Lunaria Library - 250441100075">Lunaria Library</h1>
                 <p class="app-tagline">Temukan dan jelajahi koleksi buku favoritmu</p>
             </div>
         </header>
