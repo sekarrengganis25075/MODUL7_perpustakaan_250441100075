@@ -16,10 +16,11 @@ class BukuController extends Controller
             ->withCount('peminjamans')
             ->when($request->filled('cari'), function ($query) use ($request) {
                 $cari = $request->query('cari');
-                $query->where(function ($q) use ($cari) {
-                    $q->where('judul', 'like', "%{$cari}%")
-                      ->orWhere('penulis', 'like', "%{$cari}%")
-                      ->orWhereHas('kategori', fn ($k) => $k->where('nama', 'like', "%{$cari}%"));
+                $like = $query->getConnection()->getDriverName() === 'pgsql' ? 'ilike' : 'like';
+                $query->where(function ($q) use ($cari, $like) {
+                    $q->where('judul', $like, "%{$cari}%")
+                      ->orWhere('penulis', $like, "%{$cari}%")
+                      ->orWhereHas('kategori', fn ($k) => $k->where('nama', $like, "%{$cari}%"));
                 });
             })
             ->when($request->filled('kategori'), fn ($q) => $q->where('kategori_id', $request->query('kategori')))
